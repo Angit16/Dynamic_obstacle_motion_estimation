@@ -1,2 +1,2 @@
 # Dynamic_obstacle_motion_estimation
-I am intersted to estimate motion parameters of a dynamic obstacle which is percieved by a mobile robot using indigenius 3D range sensor.
+I am intersted to estimate motion parameters of a dynamic obstacle which is percieved by a mobile robot using indigenius 3D range sensor. The sensor is a nodding 2D lidar comprises of a servo motor that holds a 2D lidar on top of it nd the hole structure nods along pitch. In parameter_estimate.m code, we first synchronize the rotation of servo and lidar's scan. Then
