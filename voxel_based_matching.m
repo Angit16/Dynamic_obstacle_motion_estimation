@@ -60,96 +60,96 @@
 % Y1= Y(1:frame_range,:);
 % Z1= Z(1:frame_range,:);
 % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% X_mod = X1';
-% Y_mod = Y1';
-% Z_mod = Z1';
-% X_array = (X_mod(:))';
-% Y_array = (Y_mod(:))';
-% Z_array = (Z_mod(:))';
-% 
+X_mod = X1';
+Y_mod = Y1';
+Z_mod = Z1';
+X_array = (X_mod(:))';
+Y_array = (Y_mod(:))';
+Z_array = (Z_mod(:))';
 
-% % for j=1: numel(X_array)
-% %     COrd(j,1) = X_array(j);
-% %     COrd(j,2) = Y_array(j);
-% %     COrd(j,3) = Z_array(j);
-% % end
-% % voxel coordinate database
-% Data_1 = BuildOctree(X_array',Y_array',Z_array',voxel_res);
-% 
-% voxel_res = 0.05; % 5cm side
-% xmax = max([X_array' Y_array' Z_array'], [], 1);
-% xmin = min([X_array' Y_array' Z_array'], [], 1);
-% 
-% % we need to set Xmin and Xmax based on the min and max range of the experimantal environment
-% % and based on how the obstacle or the robot moves corresponding positions shoulbe inducted in
-% % the voxel space.
-% xdel = (xmax-xmin)/2*.0005;
-% xmax = xmax+xdel;
-% xmin = xmin-xdel;
-% Lc = max(xmax-xmin);
-% 
-% XYZCenter  = (xmax+xmin)/2;
-% CubeCenter = xmin+Lc/2;
-% xmin       = xmin-(CubeCenter-XYZCenter);
-% 
-% Nlevel = round(log10(Lc/voxel_res)/log10(2));
-% twol  = 2^Nlevel;
-% two2l = twol^2;
-% dl    = Lc/twol;
-% % y
-% i      = floor((X_array'-xmin(1))/dl);
-% j      = floor((Y_array'-xmin(2))/dl);
-% k      = floor((Z_array'-xmin(3))/dl);
 
-% parent = two2l*k+twol*j+i;
-% groupcenter = [xmin(1)+(i+.5)*dl xmin(2)+(j+.5)*dl xmin(3)+(k+.5)*dl];
-% 
-% [iindex jindex kindex] = meshgrid(-1:1, -1:1, -1:1);
-% iindex = iindex(:);
-% jindex = jindex(:);
-% kindex = kindex(:);
-% % ... remove the self term, II = JJ = KK = 0.  The self term is not a neighbor of itself.
-% M = find(~(iindex == 0 & jindex == 0 & kindex == 0));
-% iindex = iindex(M);
-% jindex = jindex(M);
-% kindex = kindex(M);
-% 
-% [P11 P12 P13] = unique(i);
-% [P21 P22 P23] = unique(j);
-% [P31 P32 P33] = unique(k);
-% 
-% for count = 1:numel(i)
-%     summed(count) = i(count)+ j(count) + k(count);
+% for j=1: numel(X_array)
+%     COrd(j,1) = X_array(j);
+%     COrd(j,2) = Y_array(j);
+%     COrd(j,3) = Z_array(j);
 % end
-% summed_1 = summed;
-% 
-% c1 = 1;
-% i = single(i);
-% j = single(j);
-% k = single(k);
-% 
-% Big_mat = [i j k];
-% % unique combinations of i,j and k
-% unique_i = unique(i);
-% unique_j = unique(j);
-% unique_k = unique(k);
+% voxel coordinate database
+Data_1 = BuildOctree(X_array',Y_array',Z_array',voxel_res);
 
-% % from i,j,k to ID
-% c2=1;c3 =1;
-% for count1 = min(unique_k): max(unique_k)
-%     for count2 = min(unique_j): max(unique_j)
-%         for count3 = min(unique_i): max(unique_i)
-%             ID(c2) = (count1-1) *(numel(unique_i)*numel(unique_j)) + (count2-1) * (numel(unique_i)) + count3;
-%             for count4 = 1: numel(i)
-%                 if (count1 == k(count4)) && (count2 == j(count4)) && (count3 == i(count4))
-%                     ID_map(c2) = ID(c2);
-%                 else ID_map(c2) = 0;
-%                 end
-%             end
-%             c2 =c2+1;
-%         end
-%     end
-% end
+voxel_res = 0.05; % 5cm side
+xmax = max([X_array' Y_array' Z_array'], [], 1);
+xmin = min([X_array' Y_array' Z_array'], [], 1);
+
+% we need to set Xmin and Xmax based on the min and max range of the experimantal environment
+% and based on how the obstacle or the robot moves corresponding positions shoulbe inducted in
+% the voxel space.
+xdel = (xmax-xmin)/2*.0005;
+xmax = xmax+xdel;
+xmin = xmin-xdel;
+Lc = max(xmax-xmin);
+
+XYZCenter  = (xmax+xmin)/2;
+CubeCenter = xmin+Lc/2;
+xmin       = xmin-(CubeCenter-XYZCenter);
+
+Nlevel = round(log10(Lc/voxel_res)/log10(2));
+twol  = 2^Nlevel;
+two2l = twol^2;
+dl    = Lc/twol;
+% y
+i      = floor((X_array'-xmin(1))/dl);
+j      = floor((Y_array'-xmin(2))/dl);
+k      = floor((Z_array'-xmin(3))/dl);
+
+parent = two2l*k+twol*j+i;
+groupcenter = [xmin(1)+(i+.5)*dl xmin(2)+(j+.5)*dl xmin(3)+(k+.5)*dl];
+
+[iindex jindex kindex] = meshgrid(-1:1, -1:1, -1:1);
+iindex = iindex(:);
+jindex = jindex(:);
+kindex = kindex(:);
+% ... remove the self term, II = JJ = KK = 0.  The self term is not a neighbor of itself.
+M = find(~(iindex == 0 & jindex == 0 & kindex == 0));
+iindex = iindex(M);
+jindex = jindex(M);
+kindex = kindex(M);
+
+[P11 P12 P13] = unique(i);
+[P21 P22 P23] = unique(j);
+[P31 P32 P33] = unique(k);
+
+for count = 1:numel(i)
+    summed(count) = i(count)+ j(count) + k(count);
+end
+summed_1 = summed;
+
+c1 = 1;
+i = single(i);
+j = single(j);
+k = single(k);
+
+Big_mat = [i j k];
+% unique combinations of i,j and k
+unique_i = unique(i);
+unique_j = unique(j);
+unique_k = unique(k);
+
+% from i,j,k to ID
+c2=1;c3 =1;
+for count1 = min(unique_k): max(unique_k)
+    for count2 = min(unique_j): max(unique_j)
+        for count3 = min(unique_i): max(unique_i)
+            ID(c2) = (count1-1) *(numel(unique_i)*numel(unique_j)) + (count2-1) * (numel(unique_i)) + count3;
+            for count4 = 1: numel(i)
+                if (count1 == k(count4)) && (count2 == j(count4)) && (count3 == i(count4))
+                    ID_map(c2) = ID(c2);
+                else ID_map(c2) = 0;
+                end
+            end
+            c2 =c2+1;
+        end
+    end
+end
 
 % Obtain the repeated voxels accross all the frames
 % voxel repeatation based on frames
@@ -210,46 +210,46 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% without mirror config.%%%%%%%%%%%%%%%%%%%%%%%%%
-% array_sp = [];
-% for count5 = 1:numel(i)
-%     L = find(summed == summed(count5));
-%         [l1 l2] = find(unique_i == i(count5));
-%         [l11 l12] = find(unique_j==j(count5));
-%         [l21 l22] = find(unique_k==k(count5));
-%             if summed(count5)~= 1000
-%                 mat_check = Big_mat -[i(count5) j(count5) k(count5)];
-%                 interim = mat_check';
-%                 mat_check_sum = abs(interim(1,:)) + abs(interim(2,:)) + (abs(interim(3,:)));
-%                 [l1 l2] = find(unique_i == i(count5));
-%                 [l11 l12] = find(unique_j==j(count5));
-%                 [l21 l22] = find(unique_k==k(count5));
-%                 [A1 B1] = find((mat_check_sum)==0);
-%                 mat_count{c1,1} = single(ceil(B1/677));
-%                 mat_count{c1,2} = i(count5);
-%                 mat_count{c1,3} = j(count5);
-%                 mat_count{c1,4} = k(count5);
-%                 mat_count{c1,5} = single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
-%                 summed(B1) = 1000;
-%                 c1 = c1+1;
-%                 clear mat_check
-%             end
-%     if ceil((count5)/677) > floor((count5)/677)
-%         Id_cal =  single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
-%         if Id_cal ==5234
-%             array_sp = [array_sp 0];
-%         else
-%             array_sp = [array_sp Id_cal];
-%         end
-%         voxel_in_frame{ceil((count5)/677),1} = ceil((count5)/677);
-%         voxel_in_frame{ceil((count5)/677),2} = array_sp;
-%     else
-%         clear array_sp;
-%         array_sp = [];
-% %         X_min_center(ceil(count5/677)) = min(X_array(count5 - 677 +1 : count5));
-% %         Y_min_center(ceil(count5/677)) = min(Y_array(count5 - 677 +1 : count5));
-% %         Z_min_center(ceil(count5/677)) = min(Z_array(count5 - 677 +1 : count5));
-%     end
-% end
+array_sp = [];
+for count5 = 1:numel(i)
+    L = find(summed == summed(count5));
+        [l1 l2] = find(unique_i == i(count5));
+        [l11 l12] = find(unique_j==j(count5));
+        [l21 l22] = find(unique_k==k(count5));
+            if summed(count5)~= 1000
+                mat_check = Big_mat -[i(count5) j(count5) k(count5)];
+                interim = mat_check';
+                mat_check_sum = abs(interim(1,:)) + abs(interim(2,:)) + (abs(interim(3,:)));
+                [l1 l2] = find(unique_i == i(count5));
+                [l11 l12] = find(unique_j==j(count5));
+                [l21 l22] = find(unique_k==k(count5));
+                [A1 B1] = find((mat_check_sum)==0);
+                mat_count{c1,1} = single(ceil(B1/677));
+                mat_count{c1,2} = i(count5);
+                mat_count{c1,3} = j(count5);
+                mat_count{c1,4} = k(count5);
+                mat_count{c1,5} = single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
+                summed(B1) = 1000;
+                c1 = c1+1;
+                clear mat_check
+            end
+    if ceil((count5)/677) > floor((count5)/677)
+        Id_cal =  single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
+        if Id_cal ==5234
+            array_sp = [array_sp 0];
+        else
+            array_sp = [array_sp Id_cal];
+        end
+        voxel_in_frame{ceil((count5)/677),1} = ceil((count5)/677);
+        voxel_in_frame{ceil((count5)/677),2} = array_sp;
+    else
+        clear array_sp;
+        array_sp = [];
+%         X_min_center(ceil(count5/677)) = min(X_array(count5 - 677 +1 : count5));
+%         Y_min_center(ceil(count5/677)) = min(Y_array(count5 - 677 +1 : count5));
+%         Z_min_center(ceil(count5/677)) = min(Z_array(count5 - 677 +1 : count5));
+    end
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % % Segmentation of static voxels, thereby static region
@@ -270,117 +270,117 @@
 
 
 
-% c3 =1;
-% voxel_database = [];
-% K_data = [mat_count{2:end,4}];
-% k_min = min(K_data);
-% k_filtered = find(K_data <=40);
-% voxel_ground_f=[];c5=1;
-% for count = 2: size(mat_count)
-%     voxel_database = [voxel_database mat_count{count,5}];
-%     % ground filtered voxel database
-%     voxel_ground_f = [voxel_ground_f mat_count{count,5}];
-%     if mat_count{count,4} <=51
-%         voxel_ground_f(c5) = [];
-%         c5 = c5-1;
-%     end
-%     c5 = c5+1;
-% end
-% 
-% for count6 = 1:numel(voxel_ground_f)
-%     diff_checker = abs(voxel_ground_f - voxel_ground_f(count6));
-%     check_var1 = find( diff_checker ==1);
-%     count_sp = 1 * numel(check_var1>=1);
-%     while count_sp <= numel(check_var1) && count_sp > 0
-%         addr = find(voxel_database==voxel_ground_f(check_var1(count_sp)));
-%         if abs(mat_count{addr+1,2} - mat_count{count6+1,2}) ~=1 && count6>1
-%             if mod(voxel_ground_f(count6), (numel(unique_i) * numel(unique_j))) ==0
-%                 check_var1(count_sp) =[];
-%                 % count_sp = count_sp - 1;
-%             elseif mod(voxel_ground_f(count6), numel(unique_i)) ==0
-%                 check_var1(count_sp) =[];
-%                 % count_sp = count_sp - 1;
-%             elseif mod(voxel_ground_f(count6), numel(unique_i)) ~=0
-%                 check_var1(count_sp) =[];
-%                 % count_sp = count_sp - 1;
-%             end
-%         else
-%             count_sp = count_sp + 1;
-%         end
-% 
-%     end
-% 
-%     check_var2 = find(diff_checker == numel(unique_i));
-%     check_var3 = find(diff_checker == numel(unique_i) * numel(unique_j));
-%     static_voxel{c3,1} = [voxel_ground_f(count6) voxel_ground_f(check_var1) voxel_ground_f(check_var2) voxel_ground_f(check_var3)];
-%     static_voxel{c3,2} = 0;
-%     c3 = c3 + 1;
-% end
-% 
-% c4 =  1; max_count = size(static_voxel,1);
-% inter2_arr=[]; static_voxel_1 = static_voxel;
-% for count7 = 1: max_count
-%     inter2_arr = static_voxel{count7};
-%     count8 =1;
-%     while count8 < max_count
-%         intersection_a = intersect(inter2_arr, static_voxel{count8});
-% 
-%         if intersection_a == 0
-%             intersection_a = [];
-%         end
-%         inter2_arr = union(inter2_arr, static_voxel{count8} * (numel(intersection_a)>0));
-%         if numel(intersection_a) ~= 0 && count8 ~=count7
-%             static_voxel(count8,:) = [];
-%             max_count = max_count -1;
-%             count8 = count8 - 1;
-%         end
-%         count8 = count8 +1;
-%     end
-%     static_voxel{count7,1} = inter2_arr;
-%     if count7== max_count
-%         break;
-%     end
-%     %     clear inter2_arr;
-%     % c4 = c4+1;
-% end
+c3 =1;
+voxel_database = [];
+K_data = [mat_count{2:end,4}];
+k_min = min(K_data);
+k_filtered = find(K_data <=40);
+voxel_ground_f=[];c5=1;
+for count = 2: size(mat_count)
+    voxel_database = [voxel_database mat_count{count,5}];
+    % ground filtered voxel database
+    voxel_ground_f = [voxel_ground_f mat_count{count,5}];
+    if mat_count{count,4} <=51
+        voxel_ground_f(c5) = [];
+        c5 = c5-1;
+    end
+    c5 = c5+1;
+end
 
-% regenerate coordinate from ID
-% sub_s =97;
-% i_checker=[]; j_checker=[]; k_checker=[];
-% for count9 = 2 : numel(static_voxel{sub_s,1})
-%     i_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 2};
-%     j_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 3};
-%     k_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 4};
-% end
-%
-% figure
-% scatter3(i_checker, j_checker, k_checker,1, 'b','o');
+for count6 = 1:numel(voxel_ground_f)
+    diff_checker = abs(voxel_ground_f - voxel_ground_f(count6));
+    check_var1 = find( diff_checker ==1);
+    count_sp = 1 * numel(check_var1>=1);
+    while count_sp <= numel(check_var1) && count_sp > 0
+        addr = find(voxel_database==voxel_ground_f(check_var1(count_sp)));
+        if abs(mat_count{addr+1,2} - mat_count{count6+1,2}) ~=1 && count6>1
+            if mod(voxel_ground_f(count6), (numel(unique_i) * numel(unique_j))) ==0
+                check_var1(count_sp) =[];
+                % count_sp = count_sp - 1;
+            elseif mod(voxel_ground_f(count6), numel(unique_i)) ==0
+                check_var1(count_sp) =[];
+                % count_sp = count_sp - 1;
+            elseif mod(voxel_ground_f(count6), numel(unique_i)) ~=0
+                check_var1(count_sp) =[];
+                % count_sp = count_sp - 1;
+            end
+        else
+            count_sp = count_sp + 1;
+        end
+
+    end
+
+    check_var2 = find(diff_checker == numel(unique_i));
+    check_var3 = find(diff_checker == numel(unique_i) * numel(unique_j));
+    static_voxel{c3,1} = [voxel_ground_f(count6) voxel_ground_f(check_var1) voxel_ground_f(check_var2) voxel_ground_f(check_var3)];
+    static_voxel{c3,2} = 0;
+    c3 = c3 + 1;
+end
+
+c4 =  1; max_count = size(static_voxel,1);
+inter2_arr=[]; static_voxel_1 = static_voxel;
+for count7 = 1: max_count
+    inter2_arr = static_voxel{count7};
+    count8 =1;
+    while count8 < max_count
+        intersection_a = intersect(inter2_arr, static_voxel{count8});
+
+        if intersection_a == 0
+            intersection_a = [];
+        end
+        inter2_arr = union(inter2_arr, static_voxel{count8} * (numel(intersection_a)>0));
+        if numel(intersection_a) ~= 0 && count8 ~=count7
+            static_voxel(count8,:) = [];
+            max_count = max_count -1;
+            count8 = count8 - 1;
+        end
+        count8 = count8 +1;
+    end
+    static_voxel{count7,1} = inter2_arr;
+    if count7== max_count
+        break;
+    end
+    %     clear inter2_arr;
+    % c4 = c4+1;
+end
+
+regenerate coordinate from ID
+sub_s =97;
+i_checker=[]; j_checker=[]; k_checker=[];
+for count9 = 2 : numel(static_voxel{sub_s,1})
+    i_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 2};
+    j_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 3};
+    k_checker(count9) = mat_count{find(voxel_database == static_voxel{sub_s,1}(count9)) + 1, 4};
+end
+
+figure
+scatter3(i_checker, j_checker, k_checker,1, 'b','o');
 
 
-% for count_s = 1:numel(i)
-%     [l1 l2] = find(unique_i == i(count_s));
-%     [l11 l12] = find(unique_j == j(count_s));
-%     [l21 l22] = find(unique_k == k(count_s));
-%     ID_map(count_s) = single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
-% end
-% % motion estimation
+for count_s = 1:numel(i)
+    [l1 l2] = find(unique_i == i(count_s));
+    [l11 l12] = find(unique_j == j(count_s));
+    [l21 l22] = find(unique_k == k(count_s));
+    ID_map(count_s) = single((l21 -1) * numel(unique_i) * numel(unique_j) + (l11-1) * (numel(unique_i)) + l1);
+end
+% motion estimation
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Dynamic voxels database WITHOUT MIRROR
-% D_obs = [];
-% % D_obs = [D_obs static_voxel{24:27,1}];
-% D_obs = [D_obs static_voxel{3,1}];
-% D_obs = [D_obs static_voxel{21,1}];
-% D_obs = [D_obs static_voxel{62,1}];
-% D_obs = [D_obs static_voxel{85,1}];
-% D_obs = [D_obs static_voxel{96,1}];
-% D_obs = [D_obs static_voxel{101,1}];
-% D_obs = [D_obs static_voxel{122,1}];
-% D_obs = [D_obs static_voxel{136,1}];
-% % D_obs = [D_obs static_voxel{139,1}];
-% % D_obs = [D_obs static_voxel{215,1}];
-% Dyn_obs = unique(D_obs);
-% Dyn_obs(1)=[];
+D_obs = [];
+% D_obs = [D_obs static_voxel{24:27,1}];
+D_obs = [D_obs static_voxel{3,1}];
+D_obs = [D_obs static_voxel{21,1}];
+D_obs = [D_obs static_voxel{62,1}];
+D_obs = [D_obs static_voxel{85,1}];
+D_obs = [D_obs static_voxel{96,1}];
+D_obs = [D_obs static_voxel{101,1}];
+D_obs = [D_obs static_voxel{122,1}];
+D_obs = [D_obs static_voxel{136,1}];
+% D_obs = [D_obs static_voxel{139,1}];
+% D_obs = [D_obs static_voxel{215,1}];
+Dyn_obs = unique(D_obs);
+Dyn_obs(1)=[];
 
 % % static case
 % D_obs = [];
@@ -436,31 +436,31 @@
 %     Y_stamp{count12} = Y_array(Dyn_voxel_stamp{count12});
 %     Z_stamp{count12} = Z_array(Dyn_voxel_stamp{count12});
 % end
-% count16 = 1; vox_x ={}; sample_period = 97656.2514552 * 10^ (-6); total_arr_x = []; total_arr_y = []; total_arr_z = [];
+count16 = 1; vox_x ={}; sample_period = 97656.2514552 * 10^ (-6); total_arr_x = []; total_arr_y = []; total_arr_z = [];
 % % % for count13 = 1: numel(Dyn_obs)
 
-% for count13 = 1: size(voxel_in_frame,1)
-%     sample_time=[]; ar1 = []; ar2 =[]; ar3 =[];
-%     frame_s = size(voxel_in_frame{count13,2},2);
-%     for count14 = 1:frame_s
-%         temp_pos = find(voxel_in_frame{count13,2}(count14) == Dyn_obs);
+for count13 = 1: size(voxel_in_frame,1)
+    sample_time=[]; ar1 = []; ar2 =[]; ar3 =[];
+    frame_s = size(voxel_in_frame{count13,2},2);
+    for count14 = 1:frame_s
+        temp_pos = find(voxel_in_frame{count13,2}(count14) == Dyn_obs);
         
-%         if numel(temp_pos) >0
-%             ar1 = [ar1 X_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
-%             ar2 = [ar2 Y_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
-%             ar3 = [ar3 Z_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
-%             %             total_arr_x = [total_arr_x X_array((count13 - 1) *677 + temp_pos)];
-%             %             total_arr_y = [total_arr_y Y_array((count13 - 1) *677 + temp_pos)];
-%             %             total_arr_z = [total_arr_z Z_array((count13 - 1) *677 + temp_pos)];
-%             sample_time  = [sample_time  sample_period * sample_p(sum(point_num_in_frame(1:(count13-1))) + count14)];
-%         end
-%     end
-%     vox_x{count13} = ar1;
-%     vox_y{count13} = ar2;
-%     vox_z{count13} = ar3;
-%     sample_T{count13} = sample_time;
+        if numel(temp_pos) >0
+            ar1 = [ar1 X_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
+            ar2 = [ar2 Y_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
+            ar3 = [ar3 Z_array(sum(point_num_in_frame(1:(count13-1))) + count14)];
+            %             total_arr_x = [total_arr_x X_array((count13 - 1) *677 + temp_pos)];
+            %             total_arr_y = [total_arr_y Y_array((count13 - 1) *677 + temp_pos)];
+            %             total_arr_z = [total_arr_z Z_array((count13 - 1) *677 + temp_pos)];
+            sample_time  = [sample_time  sample_period * sample_p(sum(point_num_in_frame(1:(count13-1))) + count14)];
+        end
+    end
+    vox_x{count13} = ar1;
+    vox_y{count13} = ar2;
+    vox_z{count13} = ar3;
+    sample_T{count13} = sample_time;
     
-% end
+end
 
 % for count13 = 1: size(voxel_in_frame,1)
 %     sample_time=[]; ar1 = []; ar2 =[]; ar3 =[];
@@ -908,5 +908,3 @@ end
 %            doplot3(pts(OT.PointBins==i,:),'.','Color',cols(i,:))
 %        end
 %        axis image, view(3)
-
-
