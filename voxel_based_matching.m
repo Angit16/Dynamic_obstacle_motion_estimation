@@ -96,7 +96,7 @@ Nlevel = round(log10(Lc/voxel_res)/log10(2));
 twol  = 2^Nlevel;
 two2l = twol^2;
 dl    = Lc/twol;
-% y
+% conversion to voxel coordinates
 i      = floor((X_array'-xmin(1))/dl);
 j      = floor((Y_array'-xmin(2))/dl);
 k      = floor((Z_array'-xmin(3))/dl);
@@ -134,7 +134,7 @@ unique_i = unique(i);
 unique_j = unique(j);
 unique_k = unique(k);
 
-% from i,j,k to ID
+% from i,j,k to voxel ID computation
 c2=1;c3 =1;
 for count1 = min(unique_k): max(unique_k)
     for count2 = min(unique_j): max(unique_j)
